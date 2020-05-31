@@ -29,9 +29,12 @@ impl EventHandler for Handler {
     fn message(&self, ctx: Context, msg: Message) {
         let mut bot = self.bot.lock().unwrap();
 
-        if let Some(reply) = bot.handle_msg(&msg) {
-            if let Err(e) = msg.channel_id.say(&ctx.http, reply) {
-                eprintln!("Error sending message: {:?}", e);
+        // Don’t handle messages from bots.
+        if !msg.author.bot {
+            if let Some(reply) = bot.handle_msg(&msg) {
+                if let Err(e) = msg.channel_id.say(&ctx.http, reply) {
+                    eprintln!("Error sending message: {:?}", e);
+                }
             }
         }
     }
