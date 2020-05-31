@@ -19,7 +19,7 @@ impl Bot {
                 output
             }
             crate::Command::Add(assignment) => {
-                let reply = format!("Added assignment ‘{}’", assignment);
+                let reply = format!("Added assignment {}", assignment);
                 self.assignments.push(assignment);
 
                 reply
