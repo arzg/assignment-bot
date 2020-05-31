@@ -1,3 +1,4 @@
+use nom::combinator::all_consuming;
 use serenity::model::channel::Message;
 
 pub struct Bot {
@@ -5,12 +6,6 @@ pub struct Bot {
 }
 
 impl Bot {
-    pub fn new() -> Self {
-        Self {
-            assignments: Vec::new(),
-        }
-    }
-
     fn handle_command(&mut self, command: crate::Command) -> String {
         match command {
             crate::Command::List => {
@@ -33,10 +28,25 @@ impl Bot {
     }
 
     pub fn handle_msg(&mut self, msg: &Message) -> Option<String> {
-        if let Ok(("", command)) = crate::Command::new(msg.content.trim()) {
-            Some(self.handle_command(command))
-        } else {
-            None
+        let msg = msg.content.trim();
+
+        match all_consuming(crate::Command::new)(msg) {
+            Ok((_, command)) => Some(self.handle_command(command)),
+            Err(e) => {
+                eprintln!(
+                    "Encountered an error while parsing message ‘{}’: {}",
+                    msg, e
+                );
+                None
+            }
+        }
+    }
+}
+
+impl Default for Bot {
+    fn default() -> Self {
+        Self {
+            assignments: Vec::new(),
         }
     }
 }

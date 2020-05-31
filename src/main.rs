@@ -20,7 +20,7 @@ struct Handler {
 impl Handler {
     fn new() -> Self {
         Self {
-            bot: Mutex::new(assignment_bot::Bot::new()),
+            bot: Mutex::new(assignment_bot::Bot::default()),
         }
     }
 }
