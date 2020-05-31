@@ -11,7 +11,7 @@ impl Command {
     }
 
     fn new_add(s: &str) -> nom::IResult<&str, Self> {
-        let (s, _) = tag("add")(s)?;
+        let (s, _) = tag("!add")(s)?;
         let (s, _) = crate::take_whitespace1(s)?;
 
         let (s, assignment) = crate::Assignment::new(s)?;
@@ -20,7 +20,7 @@ impl Command {
     }
 
     fn new_list(s: &str) -> nom::IResult<&str, Self> {
-        let (s, _) = tag("list")(s)?;
+        let (s, _) = tag("!list")(s)?;
 
         Ok((s, Self::List))
     }
