@@ -35,7 +35,9 @@ impl Bot {
             crate::Command::Help => "\
 Adding assignments: `!add 2000-01-01 https://assignment-notification-url.com Assignment Title`
 Listing assignments: `!list`
-Finding this help: `!help`"
+Finding this help: `!help`
+Deleting a message: `!delete put-id-here`
+Ping: `!ping`"
                 .to_string(),
             crate::Command::Ping => "Pong!".to_string(),
         }
