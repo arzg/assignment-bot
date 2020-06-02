@@ -15,6 +15,13 @@ impl Bot {
 
                 reply
             }
+            crate::Command::Delete(uuid) => {
+                if let Some(removed_assignment) = self.assignments.remove(&uuid) {
+                    format!("Removed assigment with name {}", removed_assignment.name())
+                } else {
+                    format!("Tried to remove non-existent assignment with ID {}", uuid)
+                }
+            }
             crate::Command::List => {
                 let mut output = String::from("Assignments:\n");
 

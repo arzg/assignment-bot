@@ -31,6 +31,10 @@ impl Assignment {
             },
         ))
     }
+
+    pub(crate) fn name(&self) -> &str {
+        &self.name
+    }
 }
 
 impl fmt::Display for Assignment {
