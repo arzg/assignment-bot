@@ -29,6 +29,7 @@ dependencies = [
  "chrono",
  "nom",
  "serenity",
+ "url",
 ]
 
 [[package]]
