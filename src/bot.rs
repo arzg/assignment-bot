@@ -37,6 +37,7 @@ Adding assignments: `!add 2000-01-01 https://assignment-notification-url.com Ass
 Listing assignments: `!list`
 Finding this help: `!help`"
                 .to_string(),
+            crate::Command::Ping => "Pong!".to_string(),
         }
     }
 

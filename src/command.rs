@@ -5,6 +5,7 @@ pub(crate) enum Command {
     List,
     Help,
     Delete(uuid::Uuid),
+    Ping,
 }
 
 impl Command {
@@ -14,6 +15,7 @@ impl Command {
             Self::new_delete,
             Self::new_list,
             Self::new_help,
+            Self::new_ping,
         ))(s)
     }
 
@@ -46,5 +48,11 @@ impl Command {
         let (s, _) = tag("!help")(s)?;
 
         Ok((s, Self::Help))
+    }
+
+    fn new_ping(s: &str) -> nom::IResult<&str, Self> {
+        let (s, _) = tag("!ping")(s)?;
+
+        Ok((s, Self::Ping))
     }
 }
