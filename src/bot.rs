@@ -1,8 +1,9 @@
 use nom::combinator::all_consuming;
 use serenity::model::channel::Message;
+use std::collections::HashMap;
 
 pub struct Bot {
-    assignments: Vec<crate::Assignment>,
+    assignments: HashMap<uuid::Uuid, crate::Assignment>,
 }
 
 impl Bot {
@@ -10,15 +11,15 @@ impl Bot {
         match command {
             crate::Command::Add(assignment) => {
                 let reply = format!("Added assignment {}", assignment);
-                self.assignments.push(assignment);
+                self.assignments.insert(uuid::Uuid::new_v4(), assignment);
 
                 reply
             }
             crate::Command::List => {
                 let mut output = String::from("Assignments:\n");
 
-                for assignment in &self.assignments {
-                    output.push_str(&assignment.to_string());
+                for (uuid, assignment) in &self.assignments {
+                    output.push_str(&format!("{}. ID: {}", assignment, uuid));
                     output.push_str("\n");
                 }
 
@@ -51,7 +52,7 @@ Finding this help: `!help`"
 impl Default for Bot {
     fn default() -> Self {
         Self {
-            assignments: Vec::new(),
+            assignments: HashMap::new(),
         }
     }
 }

@@ -9,5 +9,6 @@ license = "MIT OR Apache-2.0"
 anyhow = "1"
 chrono = "0.4"
 nom = "5"
-url = "2"
 serenity = "0.8"
+url = "2"
+uuid = { version = "0.8", features = ["v4"] }

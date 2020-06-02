@@ -7,7 +7,7 @@ pub(crate) struct Assignment {
 }
 
 impl Assignment {
-    pub fn new(s: &str) -> nom::IResult<&str, Self> {
+    pub(crate) fn new(s: &str) -> nom::IResult<&str, Self> {
         let (s, date) = crate::take_until_whitespace(s)?;
 
         let date = chrono::NaiveDate::parse_from_str(date, "%F")
@@ -40,7 +40,7 @@ impl fmt::Display for Assignment {
             "‘{}’, which is due on {}. Notification: {}",
             self.name,
             self.date.format("%d %B, %Y"),
-            self.notification
+            self.notification,
         )
     }
 }
