@@ -34,10 +34,6 @@ impl EventHandler for Handler {
             if let Some(reply) = bot.handle_msg(&msg) {
                 if let Err(e) = msg.channel_id.say(&ctx.http, reply) {
                     eprintln!("Error sending message: {:?}", e);
-                } else {
-                    if let Err(e) = msg.delete(ctx.http) {
-                        eprintln!("Error deleting message: {:?}", e);
-                    }
                 }
             }
         }
