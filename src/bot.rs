@@ -8,6 +8,12 @@ pub struct Bot {
 impl Bot {
     fn handle_command(&mut self, command: crate::Command) -> String {
         match command {
+            crate::Command::Add(assignment) => {
+                let reply = format!("Added assignment {}", assignment);
+                self.assignments.push(assignment);
+
+                reply
+            }
             crate::Command::List => {
                 let mut output = String::from("Assignments:\n");
 
@@ -18,12 +24,11 @@ impl Bot {
 
                 output
             }
-            crate::Command::Add(assignment) => {
-                let reply = format!("Added assignment {}", assignment);
-                self.assignments.push(assignment);
-
-                reply
-            }
+            crate::Command::Help => "\
+Adding assignments: `!add 2000-01-01 https://assignment-notification-url.com Assignment Title`
+Listing assignments: `!list`
+Finding this help: `!help`"
+                .to_string(),
         }
     }
 
