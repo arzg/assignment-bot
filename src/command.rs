@@ -1,4 +1,5 @@
 use nom::{branch::alt, bytes::complete::tag};
+use serenity::model::permissions::Permissions;
 
 pub(crate) enum Command {
     Add(crate::Assignment),
@@ -9,6 +10,8 @@ pub(crate) enum Command {
 }
 
 impl Command {
+    pub(crate) const DELETE_PERMS: Permissions = Permissions::MANAGE_MESSAGES;
+
     pub(crate) fn new(s: &str) -> nom::IResult<&str, Self> {
         alt((
             Self::new_add,

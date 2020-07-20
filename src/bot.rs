@@ -1,5 +1,5 @@
 use nom::combinator::all_consuming;
-use serenity::model::channel::Message;
+use serenity::model::{channel::Message, permissions::Permissions};
 use std::collections::HashMap;
 
 pub struct Bot {
@@ -7,7 +7,7 @@ pub struct Bot {
 }
 
 impl Bot {
-    fn handle_command(&mut self, command: crate::Command) -> String {
+    fn handle_command(&mut self, command: crate::Command, perms: Permissions) -> String {
         match command {
             crate::Command::Add(assignment) => {
                 let reply = format!("Added assignment {}", assignment);
@@ -16,6 +16,11 @@ impl Bot {
                 reply
             }
             crate::Command::Delete(uuid) => {
+                if !perms.intersects(crate::Command::DELETE_PERMS) {
+                    return "You do not have suffient permissions to delete assignments"
+                        .to_string();
+                }
+
                 if let Some(removed_assignment) = self.assignments.remove(&uuid) {
                     format!("Removed assigment with name {}", removed_assignment.name())
                 } else {
@@ -26,7 +31,7 @@ impl Bot {
                 let mut output = String::from("Assignments:\n");
 
                 for (uuid, assignment) in &self.assignments {
-                    output.push_str(&format!("{}. ID: {}", assignment, uuid));
+                    output.push_str(&format!("\n{}. ID: {}", assignment, uuid));
                     output.push_str("\n");
                 }
 
@@ -43,11 +48,11 @@ Ping: `!ping`"
         }
     }
 
-    pub fn handle_msg(&mut self, msg: &Message) -> Option<String> {
+    pub fn handle_msg(&mut self, msg: &Message, perms: Permissions) -> Option<String> {
         let msg = msg.content.trim();
 
         match all_consuming(crate::Command::new)(msg) {
-            Ok((_, command)) => Some(self.handle_command(command)),
+            Ok((_, command)) => Some(self.handle_command(command, perms)),
             Err(e) => {
                 eprintln!(
                     "Encountered an error while parsing message ‘{}’: {}",

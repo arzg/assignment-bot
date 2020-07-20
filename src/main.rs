@@ -31,7 +31,15 @@ impl EventHandler for Handler {
 
         // Don’t handle messages from bots.
         if !msg.author.bot {
-            if let Some(reply) = bot.handle_msg(&msg) {
+            let perms = match msg
+                .guild(&ctx)
+                .map(|guild| guild.read().member_permissions(&msg.author))
+            {
+                Some(perms) => perms,
+                _ => return,
+            };
+
+            if let Some(reply) = bot.handle_msg(&msg, perms) {
                 if let Err(e) = msg.channel_id.say(&ctx.http, reply) {
                     eprintln!("Error sending message: {:?}", e);
                 }
